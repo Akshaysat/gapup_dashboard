@@ -2,3 +2,4 @@ numpy==1.20.3
 packaging==20.9
 pandas==1.2.4
 streamlit==1.14.0
+kiteconnect==4.1.0
