@@ -17,6 +17,15 @@ hide_streamlit_style = """
             """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
+
+def color_survived(val):
+    if val > 0:
+        color = "#7FFF00"
+    elif val < 0:
+        color = "#dc143c"
+    return f"color: {color}"
+
+
 st.title("Gapup Strategy Dashboard")
 
 # select the client name
@@ -193,4 +202,8 @@ st.write("-----")
 
 # Month-wise PNL
 st.header("Month-wise PNL")
-st.table(final_df_month[["month_year", "net_pnl"]])
+st.table(
+    final_df_month[["month_year", "net_pnl"]].style.applymap(
+        color_survived, subset=["net_pnl"]
+    )
+)
