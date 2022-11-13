@@ -64,6 +64,30 @@ final_df = (
 )
 final_df.reset_index(inplace=True)
 
+# set inital streak values
+final_df["loss_streak"] = 0
+final_df["win_streak"] = 0
+
+if final_df["net_pnl"][0] > 0:
+    final_df["loss_streak"][0] = 0
+    final_df["win_streak"][0] = 1
+
+else:
+    final_df["loss_streak"][0] = 1
+    final_df["win_streak"][0] = 0
+
+# find winning and losing streaks
+for i in range(1, final_df.shape[0]):
+
+    if final_df["net_pnl"][i] > 0:
+        final_df["loss_streak"][i] = 0
+        final_df["win_streak"][i] = final_df["win_streak"][i - 1] + 1
+
+    else:
+        final_df["win_streak"][i] = 0
+        final_df["loss_streak"][i] = final_df["loss_streak"][i - 1] + 1
+
+
 # cumulative PNL
 final_df["cum_pnl"] = final_df["net_pnl"].cumsum()
 
@@ -105,6 +129,8 @@ win_ratio = round((winning_days / total_days) * 100, 2)
 max_profit = round(final_df["net_pnl"].max(), 2)
 max_loss = round(final_df["net_pnl"].min(), 2)
 max_drawdown = round(final_df["drawdown"].min(), 2)
+max_winning_streak = max(final_df["win_streak"])
+max_losing_streak = max(final_df["loss_streak"])
 avg_profit_on_win_days = final_df[final_df["net_pnl"] > 0]["net_pnl"].sum() / len(
     final_df[final_df["net_pnl"] > 0]
 )
@@ -124,15 +150,14 @@ KPI = {
     "Total days": total_days,
     "Winning days": winning_days,
     "Losing days": losing_days,
-    # "Win %": win_ratio,
     "Max Profit": max_profit,
     "Max Loss": max_loss,
+    "Max Winning Streak": max_winning_streak,
+    "Max Losing Streak": max_losing_streak,
     "Max Drawdown": max_drawdown,
     "Average Profit on win days": avg_profit_on_win_days,
     "Average Loss on loss days": avg_loss_on_loss_days,
-    "Total Transaction Cost": total_charges
-    # "Average Profit per day": avg_profit_per_day,
-    # "Net Profit": net_profit,
+    "Total Transaction Cost": total_charges,
 }
 strategy_stats = pd.DataFrame(KPI.values(), index=KPI.keys(), columns=[" "]).astype(int)
 
