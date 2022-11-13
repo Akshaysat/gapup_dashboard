@@ -42,7 +42,7 @@ df["brokerage"] = df["brokerage"].apply(lambda x: min(40, x))
 df["stt"] = (((df["entry_price"] + df["exit_price"]) / 2) * df["quantity"]) * (
     0.025 / 100
 )
-df["txn_charges"] = (df["turnover"] * 0.0035) / 100
+df["txn_charges"] = (df["turnover"] * 0.00345) / 100
 df["sebi_charges"] = 1.18 * ((df["turnover"] * 10) / 10000000)
 df["stamp_duty"] = (df["turnover"] * 0.0015) / 100
 df["gst"] = ((df["brokerage"] + df["sebi_charges"] + df["txn_charges"]) * 18) / 100
