@@ -154,6 +154,7 @@ expectancy = round(
 )
 net_profit = round(final_df["cum_pnl"].iloc[-1], 2)
 total_charges = round(final_df["charges"].sum())
+recent_pnl = round(final_df.iloc[-1]["net_pnl"], 2)
 
 KPI = {
     "Total days": total_days,
@@ -175,7 +176,7 @@ strategy_stats = pd.DataFrame(KPI.values(), index=KPI.keys(), columns=[" "]).ast
 st.write("-----")
 col1, col2, col3 = st.columns(3)
 col1.metric(label="Win %", value=str(win_ratio) + " %")
-col2.metric(label="Net Profit", value="₹ " + str(int(net_profit)))
+col2.metric(label="Net Profit", value="₹ " + str(int(net_profit)), delta=recent_pnl)
 col3.metric(label="Avg. daily profit", value="₹ " + str(int(avg_profit_per_day)))
 st.write("-----")
 st.subheader("Strategy Statistics")
