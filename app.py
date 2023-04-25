@@ -7,6 +7,7 @@ import datetime as dt
 from pymongo import MongoClient, DESCENDING
 import requests
 import plotly.express as px
+import urllib
 
 # hide streamlit branding and hamburger menu
 hide_streamlit_style = """
@@ -35,9 +36,10 @@ client_name = st.selectbox(
 
 
 # connect to the database
-mongo = MongoClient(st.secrets["connection_db_url"]["url"])
-
-mydb = mongo["test"]
+mongo = MongoClient(
+    f'mongodb://LearnApp:{urllib.parse.quote("mongodb@1234")}@ac-bkjrzni-shard-00-00.uamkcnq.mongodb.net:27017,ac-bkjrzni-shard-00-01.uamkcnq.mongodb.net:27017,ac-bkjrzni-shard-00-02.uamkcnq.mongodb.net:27017/?ssl=true&replicaSet=atlas-r6l0ow-shard-0&authSource=admin&retryWrites=true&w=majority'
+)
+mydb = mongo["algo"]
 coll = mydb["gapup-" + client_name]
 
 df = pd.DataFrame(list(coll.find()))
